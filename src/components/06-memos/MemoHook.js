@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useCounter } from '../../hooks/useCounter'
 import { useMemo } from 'react'
+import { heavyProcess } from '../../helpers/heavyProcess'
 
 import './hooks.css'
-import { heavyProcess } from '../../helpers/heavyProcess'
 
 export const MemoHook = () => {
 
