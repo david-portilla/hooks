@@ -22,6 +22,20 @@ export const TodoApp = () => {
     localStorage.setItem('todos', JSON.stringify(todos))
   }, [ todos ])
 
+  // remove Todo by Id
+  const handleDelete = (todoId) => {
+    // e.preventDefault()
+
+    console.log(todoId)
+    //
+    const remove = {
+      type: 'delete',
+      payload: todoId
+    }
+    // update state with reducer
+    dispatch(remove)
+  }
+
   // Save new todos from form
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -36,13 +50,13 @@ export const TodoApp = () => {
       done: false
     }
 
-    const action = {
+    const add = {
       type: 'add',
       payload: newTodo
     }
 
     // update state with reducer
-    dispatch(action)
+    dispatch(add)
     // clear the form after reducer
     reset()
   }
@@ -61,7 +75,10 @@ export const TodoApp = () => {
                   key={ todo.id }
                   className="list-group-item">
                   <p className="text-center">{ i + 1 }. { todo.desc }</p>
-                  <button className="btn btn-danger"> Remove task </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={ () => handleDelete(todo.id) }
+                  > Remove task </button>
                 </li>
               ))
             }
