@@ -1,25 +1,38 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import { todoReducer } from './todoReducer'
+import { useForm } from '../../hooks/useForm'
 
 import './styles.css'
 
-const initialState = [ {
-  id: new Date().getTime(),
-  desc: 'Learning React',
-  done: false
-} ]
+const init = () => {
+  return JSON.parse(localStorage.getItem('todos')) || []
+}
 
 export const TodoApp = () => {
 
-  const [ todos, dispatch ] = useReducer(todoReducer, initialState)
+  const [ todos, dispatch ] = useReducer(todoReducer, [], init)
   // useReducer(reducer, initializerArg, initializer)
 
+  const [ { description }, handleInputChange, reset ] = useForm({
+    description: ''
+  })
+
+  // save new todos on localstorage
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [ todos ])
+
+  // Save new todos from form
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    // disallow empty todos
+    if (description.trim().length <= 1) return
+
     const newTodo = {
       id: new Date().getTime(),
-      desc: `New task ${ new Date().getTime() }`,
+      // desc: `New task ${ new Date().getTime() }`,
+      desc: description,
       done: false
     }
 
@@ -30,6 +43,8 @@ export const TodoApp = () => {
 
     // update state with reducer
     dispatch(action)
+    // clear the form after reducer
+    reset()
   }
 
   return (
@@ -63,7 +78,10 @@ export const TodoApp = () => {
               name="description"
               className="form-control"
               placeholder="Learn ..."
-              autoComplete="off" />
+              autoComplete="off"
+              value={ description }
+              onChange={ handleInputChange }
+            />
 
             <button
               type="submit"
