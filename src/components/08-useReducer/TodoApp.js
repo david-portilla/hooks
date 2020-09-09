@@ -36,6 +36,17 @@ export const TodoApp = () => {
     dispatch(remove)
   }
 
+
+  const handleToggle = (todoId) => {
+    //
+    const done = {
+      type: 'toggle',
+      payload: todoId
+    }
+    // update state with reducer
+    dispatch(done)
+  }
+
   // Save new todos from form
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -74,7 +85,13 @@ export const TodoApp = () => {
                 <li
                   key={ todo.id }
                   className="list-group-item">
-                  <p className="text-center">{ i + 1 }. { todo.desc }</p>
+                  <p
+                    className={ `${ todo.done && 'complete' }` }
+                    onClick={ () => handleToggle(todo.id) }
+                  >
+                    { i + 1 }. { todo.desc }
+                  </p>
+
                   <button
                     className="btn btn-danger"
                     onClick={ () => handleDelete(todo.id) }
