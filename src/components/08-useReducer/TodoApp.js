@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect } from 'react'
 import { todoReducer } from './todoReducer'
-import { useForm } from '../../hooks/useForm'
 import TodoList from './TodoList'
+import TodoAdd from './TodoAdd'
 
 import './styles.css'
 
@@ -11,12 +11,8 @@ const init = () => {
 
 export const TodoApp = () => {
 
-  const [ todos, dispatch ] = useReducer(todoReducer, [], init)
   // useReducer(reducer, initializerArg, initializer)
-
-  const [ { description }, handleInputChange, reset ] = useForm({
-    description: ''
-  })
+  const [ todos, dispatch ] = useReducer(todoReducer, [], init)
 
   // save new todos on localstorage
   useEffect(() => {
@@ -37,7 +33,7 @@ export const TodoApp = () => {
     dispatch(remove)
   }
 
-
+  // enable done todo
   const handleToggle = (todoId) => {
     //
     const done = {
@@ -48,20 +44,8 @@ export const TodoApp = () => {
     dispatch(done)
   }
 
-  // Save new todos from form
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    // disallow empty todos
-    if (description.trim().length <= 1) return
-
-    const newTodo = {
-      id: new Date().getTime(),
-      // desc: `New task ${ new Date().getTime() }`,
-      desc: description,
-      done: false
-    }
-
+  // Add todo component
+  const handleAddTodo = (newTodo) => {
     const add = {
       type: 'add',
       payload: newTodo
@@ -69,52 +53,27 @@ export const TodoApp = () => {
 
     // update state with reducer
     dispatch(add)
-    // clear the form after reducer
-    reset()
   }
 
   return (
-    <div>
+    <>
       <h1>TodoApp ({ todos.length })</h1>
       <hr />
-
       <div className="row">
         <div className="col-7">
-
           <TodoList
             todos={ todos }
             handleDelete={ handleDelete }
             handleToggle={ handleToggle } />
-
         </div>
 
         <div className="col-5">
-          <h4>Add todo</h4>
-          <hr />
-
-          <form onSubmit={ handleSubmit }>
-
-            <input
-              type="text"
-              name="description"
-              className="form-control"
-              placeholder="Learn ..."
-              autoComplete="off"
-              value={ description }
-              onChange={ handleInputChange }
-            />
-
-            <button
-              type="submit"
-              className="btn btn-outline-primary mt-1 btn-block">
-              Add new todo
-            </button>
-
-          </form>
+          <TodoAdd
+            handleAddTodo={ handleAddTodo }
+          />
         </div>
       </div>
-
-    </div>
+    </>
   )
 }
 
