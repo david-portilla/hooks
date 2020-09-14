@@ -17,12 +17,14 @@ const AppRouter = () => {
       <>
 
         <NavBar />
-        <Switch>
-          <Route exact path="/" component={ HomeScreen } />
-          <Route exact path="/about" component={ AboutScreen } />
-          <Route exact path="/login" component={ LoginScreen } />
-          <Redirect to="/" />
-        </Switch>
+        <div className="container">
+          <Switch>
+            <Route exact path="/" component={ HomeScreen } />
+            <Route exact path="/about" component={ AboutScreen } />
+            <Route exact path="/login" component={ LoginScreen } />
+            <Redirect to="/" />
+          </Switch>
+        </div>
 
       </>
     </Router>
